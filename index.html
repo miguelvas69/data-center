@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Consumo de Água em Data Centers</title>
+	<style>
+		/* Estilos Gerais */
+		:root {
+			--primary-color: #2c3e50;
+			--secondary-color: #3498db;
+			--accent-color: #2980b9;
+			--light-color: #f5f5f5;
+			--dark-color: #333;
+			--text-color: #333;
+			--shadow: 0 4px 6px rgba(0,0,0,0.1);
+			--transition: all 0.3s ease;
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			line-height: 1.6;
+			margin: 0;
+			padding: 0;
+			background-color: var(--light-color);
+			color: var(--text-color);
+			background-image: linear-gradient(to bottom, #f9f9f9, #e6f2ff);
+			background-attachment: fixed;
+		}
+
+		.container {
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 20px;
+		}
+
+		/* Cabeçalhos */
+		h1 {
+			color: var(--primary-color);
+			text-align: center;
+			margin-bottom: 30px;
+			padding: 20px 0;
+			border-bottom: 3px solid var(--secondary-color);
+			font-size: 2.2rem;
+			position: relative;
+			overflow: hidden;
+		}
+
+		h1::after {
+			content: "";
+			position: absolute;
+			bottom: -3px;
+			left: 0;
+			width: 100%;
+			height: 3px;
+			background: linear-gradient(90deg, var(--secondary-color), transparent);
+		}
+
+		h2 {
+			color: var(--accent-color);
+			margin-top: 50px;
+			margin-bottom: 20px;
+			padding: 15px;
+			border-left: 5px solid var(--secondary-color);
+			background-color: rgba(52, 152, 219, 0.1);
+			border-radius: 0 8px 8px 0;
+			box-shadow: var(--shadow);
+			transition: var(--transition);
+		}
+
+		h2:hover {
+			transform: translateX(5px);
+			background-color: rgba(52, 152, 219, 0.15);
+		}
+
+		/* Parágrafos */
+		p {
+			margin-bottom: 20px;
+			text-align: justify;
+			font-size: 1.05rem;
+		}
+
+		/* Listas */
+		ol {
+			margin-left: 30px;
+			margin-bottom: 25px;
+			counter-reset: item;
+		}
+
+		ol > li {
+			margin-bottom: 15px;
+			font-weight: bold;
+			position: relative;
+			padding-left: 10px;
+			font-size: 1.1rem;
+			color: var(--primary-color);
+		}
+
+		ol > li::before {
+			content: counter(item) ".";
+			counter-increment: item;
+			font-weight: bold;
+			color: var(--secondary-color);
+			margin-right: 10px;
+		}
+
+		ol ol {
+			margin-top: 10px;
+			margin-left: 25px;
+		}
+
+		ol ol li {
+			font-weight: normal;
+			margin-left: 0;
+			font-size: 1rem;
+			color: var(--text-color);
+			list-style-type: square;
+			padding-left: 5px;
+		}
+
+		ol ol li::before {
+			content: "";
+			counter-increment: none;
+		}
+
+		/* Tabela */
+		.table-container {
+			overflow-x: auto;
+			margin: 30px auto;
+			box-shadow: var(--shadow);
+			border-radius: 10px;
+		}
+
+		table {
+			border-collapse: collapse;
+			width: 100%;
+			background-color: white;
+			border-radius: 10px;
+			overflow: hidden;
+		}
+
+		th {
+			background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+			color: white;
+			padding: 15px;
+			text-align: center;
+			font-weight: bold;
+			position: sticky;
+			top: 0;
+		}
+
+		td {
+			padding: 12px;
+			border-bottom: 1px solid #ddd;
+			text-align: center;
+			transition: var(--transition);
+		}
+
+		tr:nth-child(even) {
+			background-color: #f8f9fa;
+		}
+
+		tr:hover {
+			background-color: #e8f4fc;
+			transform: scale(1.01);
+			box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+		}
+
+		/* Imagens */
+		img {
+			max-width: 100%;
+			height: auto;
+			display: block;
+			margin: 20px auto;
+			border-radius: 8px;
+			box-shadow: var(--shadow);
+			transition: var(--transition);
+		}
+
+		img:hover {
+			transform: scale(1.02);
+			box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+		}
+
+		/* Referências */
+		.references {
+			font-style: italic;
+			color: #666;
+			font-size: 0.9em;
+			border-top: 1px solid #ddd;
+			padding-top: 15px;
+			margin-top: 40px;
+			background-color: rgba(0,0,0,0.03);
+			padding: 20px;
+			border-radius: 8px;
+		}
+
+		/* Container centralizado */
+		.center-content {
+			margin: 30px 0;
+			text-align: center;
+		}
+
+		/* Cards para seções */
+		.card {
+			background-color: white;
+			border-radius: 10px;
+			padding: 20px;
+			margin-bottom: 25px;
+			box-shadow: var(--shadow);
+			transition: var(--transition);
+			border-left: 4px solid var(--secondary-color);
+		}
+
+		.card:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+		}
+
+		/* Destaques especiais */
+		.highlight {
+			background-color: rgba(52, 152, 219, 0.1);
+			padding: 15px;
+			border-radius: 8px;
+			margin: 20px 0;
+			border-left: 4px solid var(--secondary-color);
+		}
+
+		/* Botões e interações */
+		.btn {
+			display: inline-block;
+			background-color: var(--secondary-color);
+			color: white;
+			padding: 10px 20px;
+			border-radius: 5px;
+			text-decoration: none;
+			font-weight: bold;
+			transition: var(--transition);
+			border: none;
+			cursor: pointer;
+			margin: 10px 5px;
+		}
+
+		.btn:hover {
+			background-color: var(--accent-color);
+			transform: translateY(-2px);
+			box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+		}
+
+		/* Responsividade */
+		@media (max-width: 768px) {
+			.container {
+				padding: 10px;
+			}
+			
+			table {
+				font-size: 0.9em;
+			}
+			
+			h1 {
+				font-size: 1.6em;
+			}
+			
+			h2 {
+				font-size: 1.3em;
+			}
+			
+			.card {
+				padding: 15px;
+			}
+		}
+
+		/* Animações */
+		@keyframes fadeIn {
+			from { opacity: 0; transform: translateY(20px); }
+			to { opacity: 1; transform: translateY(0); }
+		}
+
+		.fade-in {
+			animation: fadeIn 0.8s ease forwards;
+		}
+
+		/* Navegação interna */
+		.nav-links {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			margin: 20px 0;
+		}
+
+		.nav-link {
+			margin: 5px 10px;
+			padding: 8px 15px;
+			background-color: rgba(52, 152, 219, 0.1);
+			border-radius: 20px;
+			text-decoration: none;
+			color: var(--accent-color);
+			font-weight: bold;
+			transition: var(--transition);
+		}
+
+		.nav-link:hover {
+			background-color: var(--secondary-color);
+			color: white;
+		}
+
+		/* Indicador de progresso */
+		.progress-container {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 5px;
+			background-color: rgba(0,0,0,0.1);
+			z-index: 1000;
+		}
+
+		.progress-bar {
+			height: 5px;
+			background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+			width: 0%;
+			transition: width 0.3s ease;
+		}
+
+		/* Destaques de texto */
+		b {
+			color: var(--accent-color);
+		}
+
+		/* Citação */
+		blockquote {
+			border-left: 4px solid var(--secondary-color);
+			padding-left: 20px;
+			margin: 20px 0;
+			font-style: italic;
+			background-color: rgba(52, 152, 219, 0.05);
+			padding: 15px 20px;
+			border-radius: 0 8px 8px 0;
+		}
+	</style>
+</head>
+<body>
+	<div class="progress-container">
+		<div class="progress-bar" id="progressBar"></div>
+	</div>
+
+	<div class="container">
+		<h1 class="fade-in">A Pegada Hídrica da Nuvem: Análise do Consumo de Água em Data Centers de Larga Escala e seus Impactos Ambientais</h1>
+
+		<div class="nav-links">
+			<a href="#consumo" class="nav-link">Consumo Massivo</a>
+			<a href="#impactos" class="nav-link">Impactos</a>
+			<a href="#energia" class="nav-link">Dependência Energética</a>
+			<a href="#ia" class="nav-link">Custo da IA</a>
+			<a href="#solucoes" class="nav-link">Soluções</a>
+		</div>
+
+		<div class="card fade-in">
+			<p>A escolha de uma solução de resfriamento determinará como uma instalação consome água e energia, que são aspectos essenciais de qualquer estratégia de sustentabilidade de um operador de data centers. O que nem todos sabem é que os data centers precisam de sistemas de resfriamento tanto no nível dos servidores quanto no nível do prédio. À medida que os servidores geram calor, o sistema de resfriamento a nível do servidor move o calor para uma troca de calor, que o transfere para o sistema de resfriamento a nível do edifício. O sistema do edifício então rejeita o calor para fora do prédio.</p>
+			
+			<p>No coração da transformação digital global, os data centers emergem como infraestruturas críticas, responsáveis por processar, armazenar e distribuir a imensa quantidade de dados que sustentam nossa sociedade conectada. No entanto, essa espinha dorsal digital consome quantidades colossais de energia, e uma parcela significativa dessa energia é convertida em calor. Para garantir o funcionamento estável e eficiente dos servidores, é imperative dissipar esse calor, tornando o resfriamento um elemento vital e, ao mesmo tempo, um dos maiores desafios ambientais do setor. A utilização de água para resfriar data centers e servidores é um problema sério para o meio ambiente por diversas razões, como consumo elevado, pressão sobre os recursos hídricos locais e poluição. Para discurtirmos essa problematica vamos distrinchar alguns temas como:</p>
+
+			<ol>
+				<li id="consumo">Consumo massivo de água
+					<ol>
+						<li type="square">Refrigeração evaporativa</li>
+					</ol>
+				</li>
+			</ol>
+			<ol start="2">
+				<li id="impactos">Impactos em comunidades e ecossistemas
+					<ol>
+						<li type="square">Escassez de água</li>
+						<li type="square">Poluição da água</li>
+					</ol>
+				</li>
+			</ol>
+			<ol start="3">
+				<li id="energia">Dependência de energia
+					<ol>
+						<li type="square">Consumo de energia</li>
+					</ol>
+				</li>
+			</ol>
+			<ol start="4">
+				<li id="ia">Custo ambiental da IA
+					<ol>
+						<li type="square">Inteligência artificial</li>
+					</ol>
+				</li>
+			</ol>
+		</div>
+
+		<h2>Quanto de água cada empresa consumiu?</h2>
+		
+		<div class="card">
+			<p>Imagine a imensa quantidade de dados que trafega pela internet a cada segundo: vídeos, mensagens, transações bancárias e muito mais. Tudo isso é processado e armazenado em data centers, verdadeiros "cérebros" digitais que, para funcionarem sem superaquecer, precisam de resfriamento constante. E aqui surge um detalhe que pouca gente nota: muita água é gasta nesse processo.</p>
+
+			<p>Para se ter uma ideia, uma única grande empresa de tecnologia pode consumir bilhões de litros de água por ano só para resfriar seus data centers e servidores. Em algumas regiões, o volume usado por um único data center é comparável ao consumo de uma cidade pequena.</p>
+
+			<p>Esse uso intensivo vem da dependência de sistemas de resfriamento evaporativo uma solução eficiente em termos de energia, mas que depende da evaporação de água para manter as temperaturas sob controle. O resultado é que, enquanto navegamos pela nuvem digital, deixamos uma "pegada hídrica" significativa, muitas vezes invisível, mas cada vez mais relevante para o futuro da tecnologia e do planeta. Empresas como Microsoft, Google e Meta são os gigantes que mais consomem água em seus data centers e servidores.</p>
+		</div>
+
+		<div class="table-container">
+			<table>
+				<tr>
+					<th>EMPRESA</th>
+					<th>ÁGUA UTILIZADA / 2021</th>
+					<th>ÁGUA UTILIZADA / 2022</th>
+					<th>PORCENTAGEM DE AUMENTO ÁGUA</th>
+					<th>MOTIVO</th>
+				</tr>
+				<tr>
+					<td align="center"><a><b>GOOGLE</b></a></td>
+					<td align="center">16,3 bilhões de litros</td>
+					<td align="Center">19,5 bilhões de litros</td>
+					<td align="center">+20%</td>
+					<td align="center">aumento da demanda por cargas de trabalho de Inteligência Artificial (IA)</td>
+				</tr>
+
+				<tr>
+					<td align="center"><a><b>MICROSOFT</b></a></td>
+					<td align="center">4,77 bilhões de litros</td>
+					<td align="center">6,4 bilhões de litros</td>
+					<td align="center">+34%</td>
+					<td align="center">necessidade de resfriar racks de servidores mais densos para IA, como no treinamento do modelo GPT-4</td>
+				</tr>
+			</table>
+		</div>
+
+		<div class="highlight">
+			<p>A utilização de água é fundamental para o funcionamento adequado de data centers e servidores em grandes empresas. Observa-se que, quanto maior a demanda de processamento desses equipamentos de alta tecnologia, maior é a necessidade de água para seu resfriamento. Com o avanço e a disseminação de sistemas de inteligência artificial, que exigem capacidade computacional intensiva, a tendência é que esse consumo hídrico aumente significativamente. Agora vamos discutir alguns pontos para que possamos entender essa problemática.</p>
+		</div>
+
+		<div class="card">
+			<h2>Consumo massivo de água</h2>
+			<p><b>Refrigeração evaporativa:</b> Muitos data centers utilizam torres de resfriamento que operam por meio de evaporação. Nesse sistema, a água absorve o calor dos servidores e, posteriormente, é evaporada para a atmosfera como parte do processo de remoção de energia térmica. Esse método, no entanto, consome grandes volumes do recurso, uma vez que a água evaporada é perdida e precisa ser constantemente reposta. Em escala, um data center de porte médio pode consumir milhões de litros de água por dia, o que evidencia o significativo impacto hídrico associado a essa tecnologia de resfriamento.</p>
+			<p>Em 2023, um data center no estado do Oregon, EUA, consumiu quantitativo superior a um quarto de todo o abastecimento de água do município onde estava instalado. Esse volume desproporcional gerou alarme e acentuou a preocupação da população local quanto à pressão exercida por tais instalações sobre os recursos hídricos comunitários.</p>
+		</div>
+
+		<div class="card">
+			<h2>Impactos em comunidades e ecossistemas</h2>
+			<p><b>Escassez de água:</b> O elevado consumo de água doce por parte desses data centers exerce uma pressão significativa sobre os recursos hídricos locais, especialmente em regiões já afetadas pela aridez. Essa demanda competitiva pelo recurso pode agravar a escassez de água potável para comunidades locais e comprometer atividades econômicas essenciais, como a agricultura. Consequentemente, a instalação de data centers em áreas com estresse hídrico crônico, como observado em diversos estados dos EUA, tem se tornado uma fonte crescente de conflitos socioambientais.</p>
+
+			<p><b>Poluição da água:</b> A água utilizada nos sistemas de resfriamento é comumente tratada com uma série de produtos químicos para inibir a corrosão e o crescimento de bactérias e algas. No entanto, o descarte do efluente resultante — agora carregado com esses aditivos — em corpos d'água como rios e lagos, representa um risco ambiental significativo. Essa liberação pode levar à contaminação dos ecossistemas aquáticos, com consequências danosas para a fauna e a flora, comprometendo a biodiversidade e o equilíbrio ecológico.</p>
+		</div>
+
+		<div class="card">
+			<h2>Dependência de energia</h2>
+			<p><b>Consumo de energia:</b> Os sistemas de resfriamento, por sua alta demanda energética, dependem frequentemente de fonte não renováveis. A geração de energia a partir dessas fontes, como os combustíveis fósseis, consome grandes quantidades de água e é uma das principais responsáveis pelas emissões de gases de efeito estufa.</p>
+		</div>
+
+		<div class="card">
+			<h2>Custo ambiental da IA</h2>
+			<p><b>Inteligência artificial:</b> O boom da inteligência artificial intensifica dramaticamente o consumo de água, uma vez que os data centers que a suportam demandam sistemas de refrigeração ainda mais potentes. Esse problema é agravado pela falta de transparência das empresas do setor, que, ao não divulgarem seus dados de uso hídrico, impedem um controle adequado e dificultam sua responsabilização.</p>
+
+			<blockquote>
+				Uma pesquisa do MIT Technology Review alerta que o uso de IAs generativas de imagem pode consumir até 30 vezes mais energia do que modelos de texto, refletindo-se diretamente em um maior consumo de água para o resfriamento dos data centers.
+			</blockquote>
+
+			<p>Conforme explica o professor Leonardo Emmendörfer, da UFSM, essa disparidade ocorre devido às diferentes "dimensionalidades" dos arquivos processados. Ou seja, operações com imagens, e principalmente com vídeos, exigem um poder computacional exponencialmente maior do que o processamento de texto simples. Um data center de médio porte pode consumir até aproximadamente 110 milhões de galões de água por ano para fins de resfriamento, o equivalente ao uso anual de água de aproximadamente 1.000 residências. Data centers maiores podem "beber" até 5 milhões de galões por dia, ou cerca de 1,8 bilhão anualmente, uso equivalente a uma cidade de 10.000 a 50.000 pessoas. Juntos, os 5.426 data centers do país consomem bilhões de galões de água anualmente. Um relatório estimou que os data centers dos EUA consomem 449 milhões de galões de água por dia e 163,7 bilhões de galões anualmente (em 2021). Um relatório de 2016 descobriu que menos de um terço dos operadores de data centers rastreiam o consumo de água. Espera-se que o consumo de água continue aumentando à medida que os data centers crescem em número, tamanho e complexidade.</p>
+
+			<p>De acordo com cientistas da Universidade da Califórnia, em Riverside, estima-se que cada prompt de IA de 100 palavras consuma aproximadamente uma garrafa de água (ou 519 mililitros). Pode não parecer muito, mas bilhões de usuários de IA em todo o mundo inserem prompts em sistemas como o ChatGPT a cada minuto. Grandes modelos de linguagem exigem muitos cálculos que consomem muita energia, necessitando de sistemas de resfriamento líquido.</p>
+		</div>
+
+		<div class="card">
+			<h2>Impactos da água em comunidades próximas</h2>
+			<p>O consumo de água dos 5.426 data centers em todo o país já está impactando as comunidades locais. O norte da Virgínia é considerado a capital mundial dos data centers, com mais de 300 data centers operacionais espalhados por quatro condados: Fairfax, Loudoun, Prince William e Fauquier. Coletivamente, todos os data centers no norte da Virgínia consumiram cerca de 2 bilhões de galões de água em 2023, um aumento de 63% em relação a 2019. O condado de Loudoun, com aproximadamente 200 data centers operacionais, usou cerca de 900 milhões de galões de água em 2023. Isso levou a Loudoun Water, a autoridade hídrica do condado, a depender fortemente de água potável para os data centers em vez de água recuperada.</p>
+		</div>
+
+		<div class="card" id="solucoes">
+			<h2>Tornando os data centers mais eficientes em termos de consumo de água</h2>
+			<p>A escolha mais comum dos desenvolvedores de data centers é extrair água de fontes azuis e empregar práticas de uso intensivo de água, como o resfriamento do ar por evaporação. No entanto, existem outras opções. Para fazer uma escolha mais sustentável para as comunidades e ecossistemas próximos, os desenvolvedores podem usar técnicas inovadoras de gestão de água para reduzir o consumo de água, incluindo sistemas de resfriamento em circuito fechado, resfriamento por imersão, resfriamento a ar e o uso de fontes de água não potável (por exemplo, águas residuais recicladas e água captada).</p>
+
+			<p><b>Sistemas de resfriamento em circuito fechado</b> permitem o reaproveitamento de águas residuais recicladas e de água doce, permitindo que o abastecimento de água seja utilizado múltiplas vezes. Uma torre de resfriamento pode usar ar externo para resfriar a água aquecida, permitindo que ela retorne à sua temperatura original. Esses sistemas podem reduzir o consumo de água doce em até 70%.</p>
+
+			<p><b>O resfriamento gratuito</b> é um método em que o ar frio externo é aspirado para dentro do data center para resfriar os equipamentos. Os data centers devem estar localizados em climas mais frios para que essa estratégia seja eficaz.</p>
+
+			<p><b>O resfriamento a ar</b> envolve saídas de ar e tubos de ar condicionado que removem o calor gerado pelos chips enquanto processam dados e solicitações de IA. Este método é mais eficaz em áreas onde a eletricidade é mais barata e os recursos hídricos são limitados.</p>
+
+			<p><b>O resfriamento por imersão</b> em data centers envolve o banho de servidores, chips e outros componentes em um fluido dielétrico (ou não condutor) especializado. O hardware é submerso em tanques especialmente projetados, preenchidos com o fluido refrigerante. O líquido não condutor absorve o calor dos chips e o transfere para um trocador de calor, onde é resfriado antes de retornar ao tanque. O resfriamento por imersão é um processo inovador que acarreta custos iniciais mais elevados do que o resfriamento líquido direto convencional, mas proporciona economia significativa de energia e otimização de espaço para desenvolvedores de data centers. Como a tecnologia utiliza fluidos sintéticos, ela requer significativamente menos água do que outras abordagens.</p>
+
+			<p>A adoção de fontes renováveis, como energia solar e eólica, para alimentar data centers resulta em um consumo hídrico drasticamente menor em comparação com as usinas de combustíveis fósseis. Considerando que aproximadamente 56% da eletricidade que abastece esses centros no país ainda vem de fontes fósseis, a transição para energias limpas representa uma oportunidade significativa de reduzir o uso de água.</p>
+
+			<p>Entre as fontes convencionais, as usinas a carvão são as mais intensivas no uso de água, demandando cerca de 19.185 galões por megawatt-hora (MWh) gerado. Já as movidas a gás natural consomem aproximadamente 2.800 galões por MWh. Em 2022, somente essas duas fontes foram responsáveis por 40% de toda a água retirada nos EUA — o equivalente a 48,5 trilhões de galões, dos quais 962 bilhões foram consumidos e não retornaram ao ciclo hídrico.</p>
+
+			<p>Em contrapartida, painéis solares e turbinas eólicas não utilizam água para resfriamento, uma vez que não operam com base em sistemas de vapor, como ocorre com carvão e gás natural.</p>
+
+			<p>Portanto, uma transição para uma matriz 100% renovável, com a gradual desativação das usinas fósseis, geraria uma economia de bilhões de galões de água, preservando esse recurso essencial tanto para o consumo humano quanto para a manutenção dos ecossistemas.</p>
+		</div>
+
+		<div class="references">
+			<p><b>Referência:</b></p>
+			<p>YAÑEZ-BARNUEVO, miguel. Data Centers e Consumo de Água. Instituto de Estudo Ambiental Energético, 25 de junho de 2025. Disponível em: https://www.eesi.org/articles/view/data-centers-and-water-consumption. Acesso em: 26 de outubro de 2025</p>
+		</div>
+	</div>
+
+	<script>
+		// Barra de progresso de leitura
+		window.onscroll = function() {
+			const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+			const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+			const scrolled = (winScroll / height) * 100;
+			document.getElementById("progressBar").style.width = scrolled + "%";
+		};
+
+		// Animação de entrada para os elementos
+		const observerOptions = {
+			root: null,
+			rootMargin: '0px',
+			threshold: 0.1
+		};
+
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach(entry => {
+				if (entry.isIntersecting) {
+					entry.target.classList.add('fade-in');
+				}
+			});
+		}, observerOptions);
+
+		// Observar todos os elementos com a classe .card
+		document.querySelectorAll('.card').forEach(card => {
+			observer.observe(card);
+		});
+	</script>
+</body>
+</html>
